@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en" class="loading">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ravindra Sisodia — Senior Product Designer</title>
+  <meta name="description" content="Senior product designer building at the intersection of design and code. Bengaluru, India. Available for senior roles in 2026.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#DEDBC8' },
+          fontFamily: { serif: ['"Instrument Serif"', 'serif'] }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    * {
+      font-family: 'Almarai', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    }
+    html, body { margin: 0; padding: 0; background: #000; color: #DEDBC8; }
+    body { overflow-x: hidden; }
+    html.loading { overflow: hidden; }
+    html.loading body { overflow: hidden; }
+
+    /* ---------- loader ---------- */
+    #loader {
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #loader.done {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .ld-row {
+      transform: translateY(14px);
+      opacity: 0;
+      animation: ld-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .ld-row-1 { animation-delay: 0.05s; }
+    .ld-row-2 { animation-delay: 0.18s; }
+    .ld-row-3 { animation-delay: 0.32s; }
+    .ld-row-4 { animation-delay: 0.46s; }
+    .ld-row-5 { animation-delay: 0.60s; }
+    @keyframes ld-rise {
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .noise-overlay {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    }
+    .bg-noise {
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    }
+
+    /* word pull-up base state */
+    .word-pull {
+      transform: translateY(20px);
+      opacity: 0;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .word-pull.in { transform: translateY(0); opacity: 1; }
+
+    /* generic fade-up */
+    .fade-up {
+      transform: translateY(20px);
+      opacity: 0;
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .fade-up.in { transform: translateY(0); opacity: 1; }
+
+    /* feature cards scale + fade */
+    .feature-card {
+      transform: scale(0.95);
+      opacity: 0;
+      transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .feature-card.in { transform: scale(1); opacity: 1; }
+
+    /* scroll-linked letters */
+    .scroll-letter {
+      opacity: 0.2;
+      transition: opacity 0.05s linear;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== LOADER ==================== -->
+  <div id="loader" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center px-6">
+    <div class="noise-overlay absolute inset-0 opacity-[0.4] mix-blend-overlay pointer-events-none"></div>
+
+    <div class="relative z-10 flex flex-col items-center gap-6 md:gap-10 text-center">
+      <span class="ld-row ld-row-1 text-primary text-[10px] sm:text-xs uppercase tracking-[0.18em] block">RS · Portfolio · 2026</span>
+
+      <h2 class="ld-row ld-row-2 text-[14vw] sm:text-[12vw] md:text-[10vw] lg:text-[8vw] font-medium leading-[0.85] tracking-[-0.06em] m-0 relative whitespace-nowrap" style="color: #E1E0CC">
+        Ravindra<span class="absolute top-[0.65em] -right-[0.3em] text-[0.31em]">*</span>
+      </h2>
+
+      <div class="ld-row ld-row-3 flex items-baseline gap-2">
+        <span id="loaderCount" class="text-5xl sm:text-6xl md:text-7xl font-medium tracking-[-0.04em]" style="color: #E1E0CC; font-variant-numeric: tabular-nums">00</span>
+        <span class="italic font-serif text-2xl sm:text-3xl md:text-4xl" style="color: rgba(225,224,204,0.5)">%</span>
+      </div>
+
+      <div class="ld-row ld-row-4 w-64 sm:w-80 md:w-96 h-px relative" style="background: rgba(225,224,204,0.15)">
+        <div id="loaderBar" class="absolute inset-y-0 left-0" style="width: 0%; background: #DEDBC8; transition: width 0.08s linear"></div>
+      </div>
+
+      <span id="loaderLabel" class="ld-row ld-row-5 text-gray-500 text-[10px] sm:text-xs uppercase tracking-[0.18em]">Loading the portfolio</span>
+    </div>
+  </div>
+
+  <!-- ==================== HERO ==================== -->
+  <section class="h-screen p-4 md:p-6">
+    <div class="relative h-full w-full rounded-2xl md:rounded-[2rem] overflow-hidden">
+      <video src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4"
+             autoplay loop muted playsinline
+             class="absolute inset-0 w-full h-full object-cover"></video>
+      <div class="noise-overlay absolute inset-0 opacity-[0.7] mix-blend-overlay pointer-events-none"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60 pointer-events-none"></div>
+
+      <nav class="absolute top-0 left-1/2 -translate-x-1/2 bg-black rounded-b-2xl md:rounded-b-3xl px-4 py-2 md:px-8 z-20">
+        <ul class="flex items-center gap-3 sm:gap-6 md:gap-12 lg:gap-14">
+          <li><a href="#work" class="nav-link text-[10px] sm:text-xs md:text-sm transition-colors" style="color: rgba(225, 224, 204, 0.8)">Work</a></li>
+          <li><a href="#about" class="nav-link text-[10px] sm:text-xs md:text-sm transition-colors" style="color: rgba(225, 224, 204, 0.8)">About</a></li>
+          <li><a href="#approach" class="nav-link text-[10px] sm:text-xs md:text-sm transition-colors" style="color: rgba(225, 224, 204, 0.8)">Approach</a></li>
+          <li><a href="#experience" class="nav-link text-[10px] sm:text-xs md:text-sm transition-colors" style="color: rgba(225, 224, 204, 0.8)">Experience</a></li>
+          <li><a href="#contact" class="nav-link text-[10px] sm:text-xs md:text-sm transition-colors" style="color: rgba(225, 224, 204, 0.8)">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="absolute bottom-0 left-0 right-0 p-6 md:p-10 lg:p-14 z-10">
+        <div class="grid grid-cols-12 gap-4 md:gap-6 items-end">
+          <div class="col-span-12 lg:col-span-8">
+            <h1 class="text-[20vw] sm:text-[18vw] md:text-[16vw] lg:text-[15vw] xl:text-[14vw] 2xl:text-[14vw] font-medium leading-[0.85] tracking-[-0.07em] m-0 whitespace-nowrap"
+                style="color: #E1E0CC">
+              <span class="inline-flex flex-wrap" data-pull-up="Ravindra" data-asterisk></span>
+            </h1>
+          </div>
+          <div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+            <p class="fade-up text-primary/70 text-xs sm:text-sm md:text-base" style="line-height: 1.2; transition-delay: 0.5s">
+              Ravindra is a senior product designer building at the intersection of design and code. Five years across B2B SaaS, FinTech, and enterprise. Now pioneering AI-augmented workflows with Claude Code and Figma MCP.
+            </p>
+            <a href="mailto:sisodia.ravindra10@gmail.com"
+               class="fade-up group inline-flex items-center gap-2 hover:gap-3 bg-primary rounded-full pl-5 pr-1 py-1 w-fit transition-all"
+               style="transition-delay: 0.7s">
+              <span class="text-black font-medium text-sm sm:text-base">Join the lab</span>
+              <span class="bg-black rounded-full w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E1E0CC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ABOUT ==================== -->
+  <section id="about" class="bg-black py-24 md:py-32 px-4 md:px-6 relative overflow-hidden">
+    <video src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4"
+           autoplay loop muted playsinline
+           class="absolute inset-0 w-full h-full object-cover opacity-25 pointer-events-none"></video>
+    <div class="noise-overlay absolute inset-0 opacity-[0.35] mix-blend-overlay pointer-events-none"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/85 via-black/60 to-black/90 pointer-events-none"></div>
+
+    <div class="max-w-6xl mx-auto bg-[#101010] rounded-2xl md:rounded-[2rem] p-8 md:p-16 lg:p-24 text-center relative z-10">
+      <span class="text-primary text-[10px] sm:text-xs uppercase tracking-[0.18em] block mb-8">Product design</span>
+
+      <div class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl max-w-3xl mx-auto leading-[0.95] sm:leading-[0.9] mb-12">
+        <div class="inline-flex flex-wrap justify-center" data-pull-multi>
+          <span data-segment="font-normal">I am Ravindra Sisodia,</span>
+          <span data-segment="italic font-serif">a designer fluent in code.</span>
+          <span data-segment="font-normal">I have skills in design systems, AI-augmented workflows, and interaction design.</span>
+        </div>
+      </div>
+
+      <p class="text-xs sm:text-sm md:text-base max-w-2xl mx-auto"
+         style="color: #DEDBC8; line-height: 1.55"
+         data-scroll-letters>Over the last five years, I have worked with Zop.Dev in Bangalore, ScreenRoot in Goa, ArtWorksIT and FirstCry. Together, we have shipped 20+ feature modules, $53.5K+ in annualised savings, and a Figma-variables design system used across enterprise customers.</p>
+    </div>
+  </section>
+
+  <!-- ==================== FEATURES ==================== -->
+  <section id="approach" class="min-h-screen bg-black py-24 md:py-32 px-4 md:px-6 relative">
+    <div class="bg-noise absolute inset-0 opacity-[0.15] pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto relative">
+      <div class="text-center mb-16 md:mb-24">
+        <div class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-normal max-w-4xl mx-auto leading-tight">
+          <div class="inline-flex flex-wrap justify-center" data-pull-multi>
+            <span data-segment="text-primary">Senior-grade workflows for visionary teams.</span>
+          </div>
+        </div>
+        <div class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-normal max-w-4xl mx-auto leading-tight mt-2">
+          <div class="inline-flex flex-wrap justify-center" data-pull-multi>
+            <span data-segment="text-gray-500">Built for systems. Powered by code.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 lg:h-[480px] gap-3 sm:gap-2 md:gap-1">
+        <!-- Card 1 - video -->
+        <div class="feature-card bg-[#212121] rounded-2xl md:rounded-3xl relative overflow-hidden h-64 md:h-80 lg:h-full">
+          <video src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260406_133058_0504132a-0cf3-4450-a370-8ea3b05c95d4.mp4"
+                 autoplay loop muted playsinline
+                 class="absolute inset-0 w-full h-full object-cover"></video>
+          <div class="absolute bottom-0 left-0 right-0 p-6 lg:p-8 z-10">
+            <span style="color: #E1E0CC" class="text-lg md:text-xl">Design, in code.</span>
+          </div>
+        </div>
+
+        <!-- Card 2 - Design Systems -->
+        <article class="feature-card bg-[#212121] rounded-2xl md:rounded-3xl p-6 lg:p-8 flex flex-col h-full">
+          <img src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171918_4a5edc79-d78f-4637-ac8b-53c43c220606.png&w=1280&q=85"
+               alt="" class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg mb-6 object-cover" loading="lazy">
+          <h3 class="text-primary text-base md:text-lg lg:text-xl m-0">
+            <span class="text-gray-500 mr-2 font-normal">01</span>Design Systems.
+          </h3>
+          <ul class="mt-5 flex flex-col gap-3 flex-1">
+            <li class="flex items-start gap-2.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DEDBC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
+              <span class="text-gray-400 text-xs sm:text-sm leading-relaxed">Figma variables, tokens, motion, and components.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DEDBC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
+              <span class="text-gray-400 text-xs sm:text-sm leading-relaxed">Markdown-based AI documentation that LLMs can read.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DEDBC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
+              <span class="text-gray-400 text-xs sm:text-sm leading-relaxed">20+ modules at Zop.Dev built on one source of truth.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DEDBC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
+              <span class="text-gray-400 text-xs sm:text-sm leading-relaxed">Zero off-system overrides shipped to production.</span>
+            </li>
+          </ul>
+          <a href="#" class="mt-6 inline-flex items-center gap-2 text-primary text-[10px] sm:text-xs uppercase tracking-[0.14em] hover:gap-3 transition-all">
+            Learn more
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(-45deg)"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+        </article>
+
+        <!-- Card 3 - AI-Augmented Workflows -->
+        <article class="feature-card bg-[#212121] rounded-2xl md:rounded-3xl p-6 lg:p-8 flex flex-col h-full">
+          <img src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171741_ed9845ab-f5b2-4018-8ce7-07cc01823522.png&w=1280&q=85"
+               alt="" class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg mb-6 object-cover" loading="lazy">
+          <h3 class="text-primary text-base md:text-lg lg:text-xl m-0">
+            <span class="text-gray-500 mr-2 font-normal">02</span>AI-Augmented Workflows.
+          </h3>
+          <ul class="mt-5 flex flex-col gap-3 flex-1">
+            <li class="flex items-start gap-2.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DEDBC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
+              <span class="text-gray-400 text-xs sm:text-sm leading-relaxed">Claude Code as the daily implementation engine.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DEDBC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
+              <span class="text-gray-400 text-xs sm:text-sm leading-relaxed">Figma MCP bridges design tokens directly to code.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DEDBC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
+              <span class="text-gray-400 text-xs sm:text-sm leading-relaxed">Prompt engineering tuned for design intent fidelity.</span>
+            </li>
+          </ul>
+          <a href="#" class="mt-6 inline-flex items-center gap-2 text-primary text-[10px] sm:text-xs uppercase tracking-[0.14em] hover:gap-3 transition-all">
+            Learn more
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(-45deg)"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+        </article>
+
+        <!-- Card 4 - Production Velocity -->
+        <article class="feature-card bg-[#212121] rounded-2xl md:rounded-3xl p-6 lg:p-8 flex flex-col h-full">
+          <img src="https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260405_171809_f56666dc-c099-4778-ad82-9ad4f209567b.png&w=1280&q=85"
+               alt="" class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg mb-6 object-cover" loading="lazy">
+          <h3 class="text-primary text-base md:text-lg lg:text-xl m-0">
+            <span class="text-gray-500 mr-2 font-normal">03</span>Production Velocity.
+          </h3>
+          <ul class="mt-5 flex flex-col gap-3 flex-1">
+            <li class="flex items-start gap-2.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DEDBC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
+              <span class="text-gray-400 text-xs sm:text-sm leading-relaxed">Brief to high-fidelity prototype in a single session.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DEDBC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
+              <span class="text-gray-400 text-xs sm:text-sm leading-relaxed">75 to 80% production fidelity from the first frame.</span>
+            </li>
+            <li class="flex items-start gap-2.5">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DEDBC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
+              <span class="text-gray-400 text-xs sm:text-sm leading-relaxed">AI-readable systems compress days into minutes.</span>
+            </li>
+          </ul>
+          <a href="#" class="mt-6 inline-flex items-center gap-2 text-primary text-[10px] sm:text-xs uppercase tracking-[0.14em] hover:gap-3 transition-all">
+            Learn more
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(-45deg)"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== WORK ==================== -->
+  <section id="work" class="bg-black py-24 md:py-32 px-4 md:px-6">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16 md:mb-24">
+        <div class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal max-w-3xl mx-auto leading-tight">
+          <div class="inline-flex flex-wrap justify-center" data-pull-multi>
+            <span data-segment="font-normal">Selected</span>
+            <span data-segment="italic font-serif">work.</span>
+          </div>
+        </div>
+        <p class="fade-up text-gray-500 text-xs sm:text-sm md:text-base mt-6 max-w-xl mx-auto" style="line-height: 1.4; transition-delay: 0.4s">
+          Seven shipped projects across SaaS, FinTech, and enterprise. Real metrics. Real impact.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-2 md:gap-1">
+
+        <article class="feature-card bg-[#212121] rounded-2xl md:rounded-3xl p-6 lg:p-8 flex flex-col aspect-[4/5] relative overflow-hidden group cursor-pointer">
+          <video src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260406_133058_0504132a-0cf3-4450-a370-8ea3b05c95d4.mp4"
+                 autoplay loop muted playsinline
+                 class="absolute inset-0 w-full h-full object-cover opacity-90 pointer-events-none"></video>
+          <div class="noise-overlay absolute inset-0 opacity-[0.4] mix-blend-overlay pointer-events-none"></div>
+          <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-black/80 pointer-events-none"></div>
+          <div class="flex items-center justify-between relative z-10">
+            <span class="text-[10px] uppercase tracking-[0.14em]" style="color: rgba(225,224,204,0.7)">01 · 2025</span>
+            <span class="text-primary text-[10px] uppercase tracking-[0.14em]">Zop.Dev</span>
+          </div>
+          <div class="mt-auto relative z-10">
+            <h3 class="text-primary text-2xl md:text-3xl font-medium m-0 leading-[0.95] tracking-[-0.02em]">Design in <span class="italic font-serif">code.</span></h3>
+            <p class="text-xs mt-3" style="color: rgba(225,224,204,0.7)">AI workflow · Figma MCP · Tailwind</p>
+          </div>
+        </article>
+
+        <article class="feature-card bg-[#212121] rounded-2xl md:rounded-3xl p-6 lg:p-8 flex flex-col aspect-[4/5] relative overflow-hidden group cursor-pointer">
+          <div class="absolute inset-0 pointer-events-none flex items-end opacity-50">
+            <div class="w-full h-2/3 flex items-end gap-1 px-6">
+              <div class="flex-1 rounded-sm" style="background: #DEDBC8; height: 30%"></div>
+              <div class="flex-1 rounded-sm" style="background: #DEDBC8; height: 55%"></div>
+              <div class="flex-1 rounded-sm" style="background: #DEDBC8; height: 20%"></div>
+              <div class="flex-1 rounded-sm" style="background: #DEDBC8; height: 70%"></div>
+              <div class="flex-1 rounded-sm" style="background: #DEDBC8; height: 40%"></div>
+              <div class="flex-1 rounded-sm" style="background: #DEDBC8; height: 85%"></div>
+              <div class="flex-1 rounded-sm" style="background: #DEDBC8; height: 60%"></div>
+              <div class="flex-1 rounded-sm" style="background: #DEDBC8; height: 95%"></div>
+            </div>
+          </div>
+          <div class="flex items-center justify-between relative z-10">
+            <span class="text-gray-500 text-[10px] uppercase tracking-[0.14em]">02 · 2025</span>
+            <span class="text-primary text-[10px] uppercase tracking-[0.14em]">Zop.Dev</span>
+          </div>
+          <div class="mt-auto relative z-10">
+            <h3 class="text-primary text-2xl md:text-3xl font-medium m-0 leading-[0.95] tracking-[-0.02em]">
+              <span class="italic font-serif">$53.5K+</span> saved.
+            </h3>
+            <p class="text-gray-400 text-xs mt-3">Recommendation Engine · AI · UX</p>
+          </div>
+        </article>
+
+        <article class="feature-card bg-[#212121] rounded-2xl md:rounded-3xl p-6 lg:p-8 flex flex-col aspect-[4/5] relative overflow-hidden group cursor-pointer">
+          <div class="absolute inset-0 opacity-40 pointer-events-none p-12 flex items-center justify-center">
+            <div class="grid grid-cols-4 gap-1 w-full">
+              <div class="aspect-square bg-primary/30"></div><div class="aspect-square bg-primary/30"></div><div class="aspect-square bg-primary/30"></div><div class="aspect-square bg-primary/30"></div>
+              <div class="aspect-square bg-primary/30"></div><div class="aspect-square bg-primary"></div><div class="aspect-square bg-primary/30"></div><div class="aspect-square bg-primary/30"></div>
+              <div class="aspect-square bg-primary/30"></div><div class="aspect-square bg-primary/30"></div><div class="aspect-square bg-primary/30"></div><div class="aspect-square bg-primary/30"></div>
+              <div class="aspect-square bg-primary/30"></div><div class="aspect-square bg-primary/30"></div><div class="aspect-square bg-primary/30"></div><div class="aspect-square bg-primary/30"></div>
+            </div>
+          </div>
+          <div class="flex items-center justify-between relative z-10">
+            <span class="text-gray-500 text-[10px] uppercase tracking-[0.14em]">03 · 2025</span>
+            <span class="text-primary text-[10px] uppercase tracking-[0.14em]">Zop.Dev</span>
+          </div>
+          <div class="mt-auto relative z-10">
+            <h3 class="text-primary text-2xl md:text-3xl font-medium m-0 leading-[0.95] tracking-[-0.02em]">One source <span class="italic font-serif">of truth.</span></h3>
+            <p class="text-gray-400 text-xs mt-3">Design System · 20+ modules · Tokens</p>
+          </div>
+        </article>
+
+        <article class="feature-card bg-[#212121] rounded-2xl md:rounded-3xl p-6 lg:p-8 flex flex-col aspect-[4/5] relative overflow-hidden group cursor-pointer">
+          <div class="absolute inset-0 opacity-60 pointer-events-none flex items-center justify-center">
+            <div class="text-center">
+              <span class="text-primary/30 text-[10px] uppercase tracking-[0.14em] block">Before</span>
+              <span class="text-primary/30 text-7xl md:text-8xl font-medium tracking-[-0.04em]">20</span>
+            </div>
+            <span class="text-primary/40 text-4xl md:text-5xl font-medium italic font-serif mx-3 self-center">→</span>
+            <div class="text-center">
+              <span class="text-primary text-[10px] uppercase tracking-[0.14em] block">After</span>
+              <span class="text-primary text-7xl md:text-8xl font-medium tracking-[-0.04em]">7</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between relative z-10">
+            <span class="text-gray-500 text-[10px] uppercase tracking-[0.14em]">04 · 2025</span>
+            <span class="text-primary text-[10px] uppercase tracking-[0.14em]">Zop.Dev</span>
+          </div>
+          <div class="mt-auto relative z-10">
+            <h3 class="text-primary text-2xl md:text-3xl font-medium m-0 leading-[0.95] tracking-[-0.02em]">20 → 7 <span class="italic font-serif">minutes.</span></h3>
+            <p class="text-gray-400 text-xs mt-3">Onboarding · 65% faster · UX Research</p>
+          </div>
+        </article>
+
+        <article class="feature-card bg-[#212121] rounded-2xl md:rounded-3xl p-6 lg:p-8 flex flex-col aspect-[4/5] relative overflow-hidden group cursor-pointer">
+          <div class="absolute inset-0 opacity-50 pointer-events-none flex items-end justify-center pb-2">
+            <svg viewBox="0 0 120 240" xmlns="http://www.w3.org/2000/svg" class="h-3/4">
+              <rect width="120" height="240" rx="20" fill="#DEDBC8" fill-opacity="0.2"/>
+              <rect x="8" y="8" width="104" height="224" rx="14" fill="#212121"/>
+              <rect x="18" y="24" width="50" height="6" rx="2" fill="#DEDBC8"/>
+              <rect x="18" y="44" width="84" height="42" rx="4" fill="#DEDBC8"/>
+              <rect x="26" y="56" width="34" height="6" rx="2" fill="#212121"/>
+              <rect x="26" y="68" width="22" height="4" rx="2" fill="#212121"/>
+              <circle cx="34" cy="116" r="9" fill="#DEDBC8"/>
+              <circle cx="60" cy="116" r="9" fill="#DEDBC8" fill-opacity="0.4"/>
+              <circle cx="86" cy="116" r="9" fill="#DEDBC8" fill-opacity="0.4"/>
+              <rect x="18" y="140" width="84" height="18" rx="3" fill="#DEDBC8" fill-opacity="0.15"/>
+              <rect x="18" y="166" width="84" height="18" rx="3" fill="#DEDBC8" fill-opacity="0.15"/>
+              <rect x="18" y="192" width="84" height="18" rx="3" fill="#DEDBC8" fill-opacity="0.15"/>
+            </svg>
+          </div>
+          <div class="flex items-center justify-between relative z-10">
+            <span class="text-gray-500 text-[10px] uppercase tracking-[0.14em]">05 · 2024</span>
+            <span class="text-primary text-[10px] uppercase tracking-[0.14em]">ScreenRoot</span>
+          </div>
+          <div class="mt-auto relative z-10">
+            <h3 class="text-primary text-2xl md:text-3xl font-medium m-0 leading-[0.95] tracking-[-0.02em]">Banking, <span class="italic font-serif">made legible.</span></h3>
+            <p class="text-gray-400 text-xs mt-3">Yes Bank · ICICI · M+ users</p>
+          </div>
+        </article>
+
+        <article class="feature-card bg-[#212121] rounded-2xl md:rounded-3xl p-6 lg:p-8 flex flex-col aspect-[4/5] relative overflow-hidden group cursor-pointer">
+          <div class="absolute inset-0 opacity-40 pointer-events-none p-8 flex flex-col justify-center gap-2">
+            <div class="flex gap-1">
+              <div class="px-2 py-1 text-[8px] uppercase tracking-[0.14em] text-primary border border-primary/40 rounded">Templates</div>
+              <div class="px-2 py-1 text-[8px] uppercase tracking-[0.14em] text-gray-500 border border-gray-700 rounded">Tokens</div>
+              <div class="px-2 py-1 text-[8px] uppercase tracking-[0.14em] text-gray-500 border border-gray-700 rounded">Icons</div>
+            </div>
+            <div class="text-primary/50 text-[10px] uppercase tracking-[0.14em] mt-3">29 templates</div>
+            <div class="text-primary/30 text-[9px]">LinkedIn cover, X banner, Zoom bg, OG card, Carousel, Hero strip, Email sig, Newsletter, Display ad...</div>
+          </div>
+          <div class="flex items-center justify-between relative z-10">
+            <span class="text-gray-500 text-[10px] uppercase tracking-[0.14em]">06 · 2025</span>
+            <span class="text-primary text-[10px] uppercase tracking-[0.14em]">Zop.Dev</span>
+          </div>
+          <div class="mt-auto relative z-10">
+            <h3 class="text-primary text-2xl md:text-3xl font-medium m-0 leading-[0.95] tracking-[-0.02em]">Brand kit, <span class="italic font-serif">in browser.</span></h3>
+            <p class="text-gray-400 text-xs mt-3">Internal tool · 29 templates · 0 backend</p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== EXPERIENCE ==================== -->
+  <section id="experience" class="bg-black py-24 md:py-32 px-4 md:px-6">
+    <div class="max-w-6xl mx-auto bg-[#101010] rounded-2xl md:rounded-[2rem] p-8 md:p-16 lg:p-24">
+      <span class="text-primary text-[10px] sm:text-xs uppercase tracking-[0.18em] block mb-8 text-center">Design history</span>
+      <div class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal max-w-4xl mx-auto leading-[0.95] sm:leading-[0.9] text-center mb-16 md:mb-20">
+        <div class="inline-flex flex-wrap justify-center" data-pull-multi>
+          <span data-segment="font-normal">Five years.</span>
+          <span data-segment="italic font-serif">Four companies.</span>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-10 md:gap-14">
+
+        <div class="grid grid-cols-12 gap-4 md:gap-8 items-start pb-10 md:pb-14 border-b border-[#222] fade-up">
+          <div class="col-span-12 md:col-span-3">
+            <span class="text-primary text-sm md:text-base font-medium block">2025 → Present</span>
+            <span class="text-gray-500 text-[10px] uppercase tracking-[0.14em] mt-1 block">10 months</span>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <h3 class="text-xl md:text-2xl lg:text-3xl font-normal text-primary m-0 leading-[1.05]">
+              Product Designer
+              <span class="text-gray-500 italic font-serif block md:inline md:ml-2 text-lg md:text-xl">at Zop.Dev</span>
+            </h3>
+            <ul class="mt-5 flex flex-col gap-2.5 text-gray-400 text-xs sm:text-sm md:text-base" style="line-height: 1.5">
+              <li class="flex items-start gap-2.5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DEDBC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-1 flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
+                <span>Pioneered an AI-augmented design-in-code workflow with Claude Code and Figma MCP. Days collapsed into minutes.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DEDBC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-1 flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
+                <span>Led end-to-end UX for 20+ feature modules, including a Recommendation Engine that delivered $53.5K+ in annualised savings.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DEDBC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-1 flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
+                <span>Architected a Figma-variables design system with markdown-based AI documentation.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-12 gap-4 md:gap-8 items-start pb-10 md:pb-14 border-b border-[#222] fade-up">
+          <div class="col-span-12 md:col-span-3">
+            <span class="text-primary text-sm md:text-base font-medium block">May 2024 → Feb 2025</span>
+            <span class="text-gray-500 text-[10px] uppercase tracking-[0.14em] mt-1 block">10 months</span>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <h3 class="text-xl md:text-2xl lg:text-3xl font-normal text-primary m-0 leading-[1.05]">
+              UI Designer
+              <span class="text-gray-500 italic font-serif block md:inline md:ml-2 text-lg md:text-xl">at ScreenRoot, Goa</span>
+            </h3>
+            <ul class="mt-5 flex flex-col gap-2.5 text-gray-400 text-xs sm:text-sm md:text-base" style="line-height: 1.5">
+              <li class="flex items-start gap-2.5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DEDBC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-1 flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
+                <span>Translated complex financial regulations into accessible UI used by millions of retail banking customers.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DEDBC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-1 flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
+                <span>Optimised transaction flows and security interfaces for Yes Bank and ICICI Bank.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-12 gap-4 md:gap-8 items-start pb-10 md:pb-14 border-b border-[#222] fade-up">
+          <div class="col-span-12 md:col-span-3">
+            <span class="text-primary text-sm md:text-base font-medium block">Mar 2021 → Mar 2024</span>
+            <span class="text-gray-500 text-[10px] uppercase tracking-[0.14em] mt-1 block">3 years</span>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <h3 class="text-xl md:text-2xl lg:text-3xl font-normal text-primary m-0 leading-[1.05]">
+              UI/UX Designer <span class="italic font-serif">→ Design Lead</span>
+              <span class="text-gray-500 italic font-serif block md:inline md:ml-2 text-lg md:text-xl">at ArtWorksIT, Bangalore</span>
+            </h3>
+            <ul class="mt-5 flex flex-col gap-2.5 text-gray-400 text-xs sm:text-sm md:text-base" style="line-height: 1.5">
+              <li class="flex items-start gap-2.5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DEDBC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-1 flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
+                <span>Led a team of six designers across 30+ websites and apps, from wireframes through final delivery.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DEDBC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-1 flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
+                <span>Established team-wide processes and component libraries for consistent, scalable output.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-12 gap-4 md:gap-8 items-start fade-up">
+          <div class="col-span-12 md:col-span-3">
+            <span class="text-primary text-sm md:text-base font-medium block">Sep 2020 → Feb 2021</span>
+            <span class="text-gray-500 text-[10px] uppercase tracking-[0.14em] mt-1 block">6 months</span>
+          </div>
+          <div class="col-span-12 md:col-span-9">
+            <h3 class="text-xl md:text-2xl lg:text-3xl font-normal text-primary m-0 leading-[1.05]">
+              Junior Designer
+              <span class="text-gray-500 italic font-serif block md:inline md:ml-2 text-lg md:text-xl">at FirstCry.com, Pune</span>
+            </h3>
+            <ul class="mt-5 flex flex-col gap-2.5 text-gray-400 text-xs sm:text-sm md:text-base" style="line-height: 1.5">
+              <li class="flex items-start gap-2.5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DEDBC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-1 flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
+                <span>Supported UI updates across listing pages and navigation, serving millions of shoppers.</span>
+              </li>
+              <li class="flex items-start gap-2.5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DEDBC8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-1 flex-shrink-0"><path d="M20 6L9 17l-5-5"/></svg>
+                <span>Maintained a 24-hour 1,000+ asset delivery pipeline for UAE and China storefronts.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== IMPACT ==================== -->
+  <section id="impact" class="bg-black py-24 md:py-32 px-4 md:px-6 relative">
+    <div class="bg-noise absolute inset-0 opacity-[0.12] pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto relative">
+      <div class="text-center mb-16 md:mb-24">
+        <div class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal max-w-3xl mx-auto leading-tight">
+          <div class="inline-flex flex-wrap justify-center" data-pull-multi>
+            <span data-segment="font-normal">Outcomes,</span>
+            <span data-segment="italic font-serif">not deliverables.</span>
+          </div>
+        </div>
+        <p class="fade-up text-gray-500 text-xs sm:text-sm md:text-base mt-6 max-w-xl mx-auto" style="line-height: 1.4; transition-delay: 0.4s">
+          Six measured numbers from the last five years.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-2 md:gap-1">
+
+        <article class="feature-card bg-[#212121] rounded-2xl md:rounded-3xl p-5 md:p-7 lg:p-8 flex flex-col aspect-square md:aspect-[5/4]">
+          <span class="text-gray-500 text-[10px] uppercase tracking-[0.14em]">Annualised savings</span>
+          <div class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-[-0.04em] mt-3 md:mt-5 text-primary leading-none">
+            <span class="italic font-serif">$53.5K+</span>
+          </div>
+          <span class="text-gray-400 text-[10px] md:text-xs mt-auto pt-4">Zop.Dev · Recommendation Engine</span>
+        </article>
+
+        <article class="feature-card bg-[#212121] rounded-2xl md:rounded-3xl p-5 md:p-7 lg:p-8 flex flex-col aspect-square md:aspect-[5/4]">
+          <span class="text-gray-500 text-[10px] uppercase tracking-[0.14em]">Cloud resources</span>
+          <div class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-[-0.04em] mt-3 md:mt-5 text-primary leading-none">
+            20K<span class="italic font-serif">+</span>
+          </div>
+          <span class="text-gray-400 text-[10px] md:text-xs mt-auto pt-4">Optimised across enterprise</span>
+        </article>
+
+        <article class="feature-card bg-[#212121] rounded-2xl md:rounded-3xl p-5 md:p-7 lg:p-8 flex flex-col aspect-square md:aspect-[5/4]">
+          <span class="text-gray-500 text-[10px] uppercase tracking-[0.14em]">Feature modules</span>
+          <div class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-[-0.04em] mt-3 md:mt-5 text-primary leading-none">
+            20<span class="italic font-serif">+</span>
+          </div>
+          <span class="text-gray-400 text-[10px] md:text-xs mt-auto pt-4">Brief to handoff · Zop.Dev</span>
+        </article>
+
+        <article class="feature-card bg-[#212121] rounded-2xl md:rounded-3xl p-5 md:p-7 lg:p-8 flex flex-col aspect-square md:aspect-[5/4]">
+          <span class="text-gray-500 text-[10px] uppercase tracking-[0.14em]">Enterprise POCs</span>
+          <div class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-[-0.04em] mt-3 md:mt-5 text-primary leading-none">
+            10<span class="italic font-serif">+</span>
+          </div>
+          <span class="text-gray-400 text-[10px] md:text-xs mt-auto pt-4">FMCG · Retail · Logistics</span>
+        </article>
+
+        <article class="feature-card bg-[#212121] rounded-2xl md:rounded-3xl p-5 md:p-7 lg:p-8 flex flex-col aspect-square md:aspect-[5/4]">
+          <span class="text-gray-500 text-[10px] uppercase tracking-[0.14em]">Onboarding cut</span>
+          <div class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-[-0.04em] mt-3 md:mt-5 text-primary leading-none">
+            <span class="italic font-serif">65%</span>
+          </div>
+          <span class="text-gray-400 text-[10px] md:text-xs mt-auto pt-4">20 min → 7 min · validated</span>
+        </article>
+
+        <article class="feature-card bg-[#212121] rounded-2xl md:rounded-3xl p-5 md:p-7 lg:p-8 flex flex-col aspect-square md:aspect-[5/4]">
+          <span class="text-gray-500 text-[10px] uppercase tracking-[0.14em]">Sites &amp; apps</span>
+          <div class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-[-0.04em] mt-3 md:mt-5 text-primary leading-none">
+            30<span class="italic font-serif">+</span>
+          </div>
+          <span class="text-gray-400 text-[10px] md:text-xs mt-auto pt-4">Lead a team of six · ArtWorksIT</span>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CONTACT ==================== -->
+  <section id="contact" class="min-h-[80vh] bg-black py-24 md:py-32 px-4 md:px-6 relative overflow-hidden">
+    <video src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_170732_8a9ccda6-5cff-4628-b164-059c500a2b41.mp4"
+           autoplay loop muted playsinline
+           class="absolute inset-0 w-full h-full object-cover opacity-30 pointer-events-none"></video>
+    <div class="noise-overlay absolute inset-0 opacity-[0.4] mix-blend-overlay pointer-events-none"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-black/85 via-black/65 to-black/90 pointer-events-none"></div>
+
+    <div class="relative z-10 flex flex-col items-center justify-center text-center">
+      <span class="text-primary text-[10px] sm:text-xs uppercase tracking-[0.18em] block mb-8">Open for 2026</span>
+
+      <div class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-normal max-w-4xl mx-auto leading-[0.9] tracking-[-0.04em] mb-12">
+        <div class="inline-flex flex-wrap justify-center" data-pull-multi>
+          <span data-segment="font-normal">Let's</span>
+          <span data-segment="italic font-serif">talk.</span>
+        </div>
+      </div>
+
+      <a href="mailto:sisodia.ravindra10@gmail.com"
+         class="fade-up group inline-flex items-center gap-2 hover:gap-3 bg-primary rounded-full pl-5 pr-1 py-1 w-fit transition-all"
+         style="transition-delay: 0.4s">
+        <span class="text-black font-medium text-sm sm:text-base md:text-lg">sisodia.ravindra10@gmail.com</span>
+        <span class="bg-black rounded-full w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center group-hover:scale-110 transition-transform">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E1E0CC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+
+      <div class="mt-14 md:mt-16 flex flex-wrap justify-center gap-6 md:gap-10 text-[10px] sm:text-xs uppercase tracking-[0.14em] text-gray-500">
+        <a href="https://linkedin.com/in/ravindra-sisodia" target="_blank" rel="noopener" class="hover:text-primary transition-colors">LinkedIn</a>
+        <a href="https://behance.net/ravindrasisodia" target="_blank" rel="noopener" class="hover:text-primary transition-colors">Behance</a>
+        <a href="https://dribbble.com/ravindrasisodia" target="_blank" rel="noopener" class="hover:text-primary transition-colors">Dribbble</a>
+        <a href="tel:+919168418778" class="hover:text-primary transition-colors">+91 91684 18778</a>
+        <span>Bengaluru, IN</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="border-t border-[#1a1a1a] py-8 px-4 md:px-6">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-3 text-[10px] sm:text-xs text-gray-500 uppercase tracking-[0.14em]">
+      <span>© 2026 Ravindra Sisodia</span>
+      <span>Senior Product Designer · Bengaluru, IN</span>
+      <span>Designed and built with Claude Code</span>
+    </div>
+  </footer>
+
+  <script>
+    // ============== WordsPullUp ==============
+    function setupPullUp() {
+      document.querySelectorAll('[data-pull-up]').forEach((el) => {
+        const text = el.getAttribute('data-pull-up');
+        const showAsterisk = el.hasAttribute('data-asterisk');
+        const words = text.split(' ');
+        words.forEach((word, i) => {
+          const span = document.createElement('span');
+          span.className = 'word-pull inline-block mr-[0.18em] relative';
+          span.style.transitionDelay = (i * 0.08) + 's';
+          span.textContent = word;
+          if (showAsterisk && i === words.length - 1) {
+            const ast = document.createElement('span');
+            ast.className = 'absolute top-[0.65em] -right-[0.3em] text-[0.31em]';
+            ast.textContent = '*';
+            span.appendChild(ast);
+          }
+          el.appendChild(span);
+        });
+      });
+    }
+
+    // ============== WordsPullUpMultiStyle ==============
+    function setupPullMulti() {
+      document.querySelectorAll('[data-pull-multi]').forEach((container) => {
+        const segments = Array.from(container.querySelectorAll('[data-segment]'));
+        const all = [];
+        segments.forEach((seg) => {
+          const cls = seg.getAttribute('data-segment') || '';
+          seg.textContent.split(' ').forEach((word) => {
+            if (word) all.push({ word, cls });
+          });
+        });
+        container.innerHTML = '';
+        all.forEach((entry, i) => {
+          const span = document.createElement('span');
+          span.className = 'word-pull inline-block mr-[0.18em] ' + entry.cls;
+          span.style.transitionDelay = (i * 0.08) + 's';
+          span.textContent = entry.word;
+          container.appendChild(span);
+        });
+      });
+    }
+
+    // ============== AnimatedLetter (scroll-linked) ==============
+    const scrollLettersTargets = [];
+    function setupScrollLetters() {
+      document.querySelectorAll('[data-scroll-letters]').forEach((el) => {
+        const text = el.textContent;
+        el.innerHTML = '';
+        const chars = [];
+        for (const char of text) {
+          const span = document.createElement('span');
+          span.className = 'scroll-letter';
+          span.textContent = char === ' ' ? ' ' : char;
+          el.appendChild(span);
+          chars.push(span);
+        }
+        scrollLettersTargets.push({ el, chars });
+      });
+    }
+    function updateScrollLetters() {
+      const vh = window.innerHeight;
+      scrollLettersTargets.forEach(({ el, chars }) => {
+        const rect = el.getBoundingClientRect();
+        const startTriggerY = vh * 0.8;
+        const endTriggerY = vh * 0.2;
+        const totalDistance = (startTriggerY - endTriggerY) + rect.height;
+        const scrolled = startTriggerY - rect.top;
+        const progress = Math.max(0, Math.min(1, scrolled / totalDistance));
+        chars.forEach((span, i) => {
+          const cp = i / chars.length;
+          const start = cp - 0.1;
+          const end = cp + 0.05;
+          let op;
+          if (progress < start) op = 0.2;
+          else if (progress > end) op = 1;
+          else op = 0.2 + ((progress - start) / (end - start)) * 0.8;
+          span.style.opacity = String(op);
+        });
+      });
+    }
+
+    // ============== Reveal on intersect ==============
+    function setupReveals() {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          // word-pull elements inside this target
+          entry.target.querySelectorAll('.word-pull').forEach((el) => el.classList.add('in'));
+          // self-classes
+          if (entry.target.classList.contains('fade-up')) {
+            entry.target.classList.add('in');
+          }
+          io.unobserve(entry.target);
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('[data-pull-up], [data-pull-multi]').forEach((el) => io.observe(el));
+      document.querySelectorAll('.fade-up').forEach((el) => io.observe(el));
+
+      // feature cards: stagger
+      const cardIo = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in');
+            cardIo.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '-100px' });
+      document.querySelectorAll('.feature-card').forEach((card, i) => {
+        card.style.transitionDelay = (i * 0.15) + 's';
+        cardIo.observe(card);
+      });
+    }
+
+    // ============== Nav hover (matches inline-style spec) ==============
+    function setupNavHover() {
+      document.querySelectorAll('.nav-link').forEach((link) => {
+        link.addEventListener('mouseenter', () => { link.style.color = '#E1E0CC'; });
+        link.addEventListener('mouseleave', () => { link.style.color = 'rgba(225, 224, 204, 0.8)'; });
+      });
+    }
+
+    // ============== Loader ==============
+    function fireLoaderDone() {
+      if (window.__loaderDoneFired) return;
+      window.__loaderDoneFired = true;
+      window.dispatchEvent(new Event('loaderDone'));
+    }
+
+    function initLoader() {
+      const loader = document.getElementById('loader');
+      const count = document.getElementById('loaderCount');
+      const bar = document.getElementById('loaderBar');
+      const label = document.getElementById('loaderLabel');
+      if (!loader) { fireLoaderDone(); return; }
+
+      let pageLoaded = false;
+      window.addEventListener('load', () => { pageLoaded = true; });
+
+      const labels = [
+        'Loading the portfolio',
+        'Compositing the videos',
+        'Resolving the typography',
+        'Preparing the work',
+        'Almost there'
+      ];
+      let labelIdx = 0;
+      const labelInterval = setInterval(() => {
+        labelIdx = (labelIdx + 1) % labels.length;
+        if (label) label.textContent = labels[labelIdx];
+      }, 1100);
+
+      const start = performance.now();
+      const minDuration = 1700;
+
+      function tick(now) {
+        const elapsed = now - start;
+        let p;
+        if (pageLoaded && elapsed >= minDuration) {
+          p = 1;
+        } else if (elapsed < minDuration) {
+          p = (elapsed / minDuration) * 0.92;
+        } else {
+          p = 0.92 + Math.min((elapsed - minDuration) / 4000, 0.06);
+        }
+
+        const v = Math.round(p * 100);
+        if (count) count.textContent = String(v).padStart(2, '0');
+        if (bar) bar.style.width = (p * 100) + '%';
+
+        if (p >= 1) {
+          clearInterval(labelInterval);
+          if (label) label.textContent = 'Ready';
+          setTimeout(() => {
+            loader.classList.add('done');
+            document.documentElement.classList.remove('loading');
+            setTimeout(() => {
+              loader.style.display = 'none';
+              fireLoaderDone();
+            }, 800);
+          }, 350);
+        } else {
+          requestAnimationFrame(tick);
+        }
+      }
+      requestAnimationFrame(tick);
+
+      // Safety fallback: never trap the user
+      setTimeout(() => {
+        if (loader.classList.contains('done')) return;
+        clearInterval(labelInterval);
+        loader.classList.add('done');
+        document.documentElement.classList.remove('loading');
+        setTimeout(() => {
+          loader.style.display = 'none';
+          fireLoaderDone();
+        }, 800);
+      }, 8000);
+    }
+
+    // ============== Init ==============
+    document.addEventListener('DOMContentLoaded', () => {
+      initLoader();
+      // Build the word/char spans immediately so the structure is ready,
+      // but defer the reveal observers until the loader exits — that way
+      // the hero animates in dramatically AFTER the curtain rises.
+      setupPullUp();
+      setupPullMulti();
+      setupScrollLetters();
+    });
+
+    window.addEventListener('loaderDone', () => {
+      setupReveals();
+      setupNavHover();
+      updateScrollLetters();
+      window.addEventListener('scroll', updateScrollLetters, { passive: true });
+      window.addEventListener('resize', updateScrollLetters, { passive: true });
+    });
+  </script>
+</body>
+</html>
